@@ -19,11 +19,15 @@ function showSuccess(input) {
   input.parentElement.className = "form-element success";
 }
 
-function isValidEmail(emailAddr) {
+function checkEmail(email) {
   const re =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-  return re.test(String(emailAddr).toLowerCase());
+  if (re.test(email.value.trim())) {
+    showSuccess(email);
+  } else {
+    showError(email, "Email are not valid");
+  }
 }
 
 // Check required fields
@@ -31,11 +35,33 @@ function checkRequired(inputArray) {
   inputArray.forEach((input) => {
     if (input.value.trim() === "") {
       showError(input, `${getFieldName(input)} is Required`);
-      console.log(input.id);
     } else {
       showSuccess(input);
     }
   });
+}
+
+// Check Input Length
+function checkLength(input, min, max) {
+  if (input.value.length < min) {
+    showError(
+      input,
+      `${getFieldName(input)} must be at least ${min} characters`
+    );
+  } else if (input.value.lenght > max) {
+    showError(
+      input,
+      `${getFieldName(input)} must be less than ${max} characters`
+    );
+  } else {
+  }
+}
+
+// Check two password are match or not
+function checkPwd(pwd, confirmPwd) {
+  if (pwd.value !== confirmPwd.value) {
+    showError(confirmPwd, "Password do not match");
+  }
 }
 
 function getFieldName(input) {
@@ -45,37 +71,13 @@ function getFieldName(input) {
 // Event Listeners
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-
   checkRequired([usrName, usrMail, pwd, confirmPwd]);
 
-  // Not a smart code --> --> --> --> -->
-  // Checking User Name Empty or not
-  // if (usrName.value === "") {
-  //   showError(usrName, "User Name is Required");
-  // } else {
-  //   showSuccess(usrName);
-  // }
+  checkLength(usrName, 3, 30);
+  checkLength(pwd, 4, 8);
+  // checkLength(confirmPwd, 4, 8);
 
-  // // Checking User Mail Empty or not
-  // if (usrMail.value === "") {
-  //   showError(usrMail, "E-mail is Required");
-  // } else if (!isValidEmail(usrMail.value)) {
-  //   showError(usrMail, "Please Give a Valid E-mail");
-  // } else {
-  //   showSuccess(usrMail);
-  // }
+  checkEmail(usrMail);
 
-  // // Checking User Password Empty or not
-  // if (pwd.value === "") {
-  //   showError(pwd, "User Password is Required");
-  // } else {
-  //   showSuccess(pwd);
-  // }
-
-  // // Checking Confirm Password Empty or not
-  // if (confirmPwd.value === "") {
-  //   showError(confirmPwd, "Confirm Password is Required");
-  // } else {
-  //   showSuccess(confirmPwd);
-  // }
+  checkPwd(pwd, confirmPwd);
 });

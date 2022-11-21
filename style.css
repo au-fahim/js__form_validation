@@ -78,11 +78,11 @@ form.signup-form {
 .form-element small {
   color: var(--clr-error);
   letter-spacing: 0.5px;
-  visibility: hidden;
+  display: none;
 }
 
 .form-element.error small {
-  visibility: visible;
+  display: inline-block;
 }
 
 .terms-checker {
